@@ -100,8 +100,34 @@ function webpHasMeta(buf) {
 
 async function hasGps(file, buf) {
   if (path.extname(file).toLowerCase() === '.webp') return webpHasMeta(buf);
-  const g = await exifr.gps(file).catch(() => null);
+  const g = await exifr.gps(buf).catch(() => null);
   return !!(g && (g.latitude || g.longitude)) || XMP_GPS.test(buf.toString('latin1'));
+}
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const TMP_EXT = '.gps-tmp';
+
+// Безопасная замена файла: новое содержимое пишется во временный файл рядом и подменяет оригинал.
+// Если оригинал сейчас открыт другой программой (просмотрщик фото, антивирус, облачная синхронизация),
+// Windows не даёт его заменить — делаем несколько повторных попыток.
+async function replaceFile(file, data) {
+  const tmp = file + TMP_EXT;
+  fs.writeFileSync(tmp, data);
+  let lastErr;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    try {
+      fs.renameSync(tmp, file);
+      return;
+    } catch (e) {
+      lastErr = e;
+      await sleep(400 * (attempt + 1));
+    }
+  }
+  fs.rmSync(tmp, { force: true });
+  const busy = ['EBUSY', 'EPERM', 'EACCES', 'UNKNOWN'].includes(lastErr.code);
+  throw new Error(busy
+    ? 'файл занят другой программой (закройте просмотр фото / остановите npm run dev) — попробуйте ещё раз'
+    : `не удалось записать файл (${lastErr.code || lastErr.message})`);
 }
 
 let checked = 0, cleaned = 0;
@@ -111,22 +137,23 @@ if (fs.existsSync(LAKES)) {
     if (!dir.isDirectory()) continue;
     for (const f of fs.readdirSync(path.join(LAKES, dir.name))) {
       const file = path.join(LAKES, dir.name, f);
+      if (f.endsWith(TMP_EXT)) { fs.rmSync(file, { force: true }); continue; } // остаток прерванного запуска
       const ext = path.extname(f).toLowerCase();
       if (/\.hei[cf]$/.test(ext)) { problems.push(`${dir.name}/${f}: формат HEIC — GPS не удалить, сохраните фото как JPEG`); continue; }
       const strip = STRIP[ext];
       if (!strip) continue;
       checked++;
-      const buf = fs.readFileSync(file);
-      if (!(await hasGps(file, buf))) continue;
       try {
+        const buf = fs.readFileSync(file);
+        if (!(await hasGps(file, buf))) continue;
         const out = strip(buf);
         if (!out) throw new Error('координаты не найдены в известных блоках метаданных');
-        fs.writeFileSync(file, out);
+        // проверка до записи: оригинал не трогаем, если очистка не удалась
         if (await hasGps(file, out)) throw new Error('после очистки координаты всё ещё читаются');
+        await replaceFile(file, out);
         cleaned++;
         console.log(`  GPS удалён: ${dir.name}/${f}`);
       } catch (e) {
-        fs.writeFileSync(file, buf); // возвращаем исходный файл без изменений
         problems.push(`${dir.name}/${f}: ${e.message}`);
       }
     }

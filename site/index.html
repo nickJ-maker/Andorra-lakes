@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Озёра Андорры — пешие маршруты к горным озёрам</title>
+<meta name="description" content="Карта пеших маршрутов к горным озёрам Андорры и приграничья Франции и Испании: фотографии, точки старта и маршруты в Komoot.">
+<meta name="theme-color" content="#efe3c8">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Озёра Андорры">
+<meta property="og:description" content="Пешие маршруты к горным озёрам Андорры и приграничья: карта, фото, маршруты Komoot.">
+<meta property="og:image" content="{{SITE_URL}}{{OG_IMAGE}}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="preload" as="image" href="relief.webp" type="image/webp">
+<link rel="stylesheet" href="style.css?v={{BUILD}}">
+</head>
+<body>
+<div class="app">
+  <main class="map-area" id="mapArea">
+    <div class="map-frame">
+      <div class="map" id="map">
+        <svg class="map-svg" id="mapSvg" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Карта озёр Андорры и приграничья">
+          <g id="geo">
+            <image href="relief.webp" width="{{MAP_W}}" height="{{MAP_H}}" preserveAspectRatio="none"/>
+            <!--MAP_GEO-->
+          </g>
+          <g id="labels" class="labels" aria-hidden="true"></g>
+          <g id="markers" class="markers"></g>
+        </svg>
+        <div class="map-paper" aria-hidden="true"></div>
+
+        <header class="cartouche">
+          <h1>Озёра Андорры</h1>
+          <p>Пешие маршруты к&nbsp;горным озёрам</p>
+        </header>
+
+        <div class="zoom" role="group" aria-label="Масштаб карты">
+          <button type="button" id="zoomIn" aria-label="Приблизить">+</button>
+          <button type="button" id="zoomOut" aria-label="Отдалить">−</button>
+          <button type="button" id="zoomReset" aria-label="Показать все озёра" title="Показать все озёра">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 8V3h5M17 8V3h-5M3 12v5h5M17 12v5h-5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+          </button>
+        </div>
+
+        <svg class="compass" viewBox="-50 -50 100 100" aria-hidden="true">
+          <circle r="30" class="c-ring"/>
+          <circle r="26" class="c-ring c-thin"/>
+          <g class="c-minor">
+            <path d="M0 0L6 -6L0 -36L-6 -6Z" transform="rotate(45)"/>
+            <path d="M0 0L6 -6L0 -36L-6 -6Z" transform="rotate(135)"/>
+            <path d="M0 0L6 -6L0 -36L-6 -6Z" transform="rotate(225)"/>
+            <path d="M0 0L6 -6L0 -36L-6 -6Z" transform="rotate(315)"/>
+          </g>
+          <g class="c-major">
+            <path d="M0 0L8 -8L0 -46Z" class="c-dark"/><path d="M0 0L-8 -8L0 -46Z" class="c-light"/>
+            <path d="M0 0L8 -8L0 -46Z" class="c-dark" transform="rotate(90)"/><path d="M0 0L-8 -8L0 -46Z" class="c-light" transform="rotate(90)"/>
+            <path d="M0 0L8 -8L0 -46Z" class="c-dark" transform="rotate(180)"/><path d="M0 0L-8 -8L0 -46Z" class="c-light" transform="rotate(180)"/>
+            <path d="M0 0L8 -8L0 -46Z" class="c-dark" transform="rotate(270)"/><path d="M0 0L-8 -8L0 -46Z" class="c-light" transform="rotate(270)"/>
+          </g>
+          <circle r="3" class="c-dot"/>
+          <text y="-47" text-anchor="middle" class="c-n">С</text>
+        </svg>
+
+        <div class="map-foot">
+          <details class="legend">
+            <summary>Условные знаки</summary>
+            <ul>
+              <li><svg viewBox="0 0 24 24"><use href="#sym-lake"/></svg>Озеро с маршрутом</li>
+              <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" class="lg-town"/></svg>Населённый пункт</li>
+              <li><svg viewBox="0 0 24 24"><path d="M12 6l6 11H6z" class="lg-peak"/></svg>Вершина, высота в м</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 12h20" class="lg-road-c"/><path d="M2 12h20" class="lg-road"/></svg>Дорога</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 14c5-6 8 4 20-4" class="lg-river"/></svg>Река</li>
+              <li><svg viewBox="0 0 24 24"><path d="M2 12h20" class="lg-ribbon"/><path d="M2 12h20" class="lg-border"/></svg>Государственная граница</li>
+            </ul>
+          </details>
+          <div class="scalebar" id="scalebar" aria-hidden="true"></div>
+        </div>
+
+        <div class="tooltip" id="tooltip" hidden></div>
+        <a class="to-list" href="#lakeList" id="toList">Список озёр ↓</a>
+      </div>
+    </div>
+  </main>
+
+  <aside class="panel" aria-labelledby="listTitle">
+    <h2 id="listTitle">Список озёр</h2>
+    <ul class="lake-list" id="lakeList"></ul>
+    <footer class="credits">
+      <p>Рельеф: Copernicus DEM (©&nbsp;DLR, Airbus, ЕКА/ЕС). Картографические данные: ©&nbsp;участники <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>.</p>
+    </footer>
+  </aside>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="mTitle" tabindex="-1">
+    <button type="button" class="modal-close" data-close aria-label="Закрыть">×</button>
+    <header class="m-head">
+      <h2 id="mTitle"></h2>
+      <p class="m-country" id="mCountry"></p>
+    </header>
+    <nav class="m-links" id="mLinks" aria-label="Ссылки маршрута"></nav>
+    <section class="m-gallery" id="mGallery" aria-label="Фотографии"></section>
+    <section class="m-komoot" id="mKomoot" aria-labelledby="mKomootTitle">
+      <h3 id="mKomootTitle">Маршрут</h3>
+      <div class="komoot-frame" id="mKomootFrame"></div>
+      <p class="komoot-note" id="mKomootNote"></p>
+    </section>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Просмотр фотографии">
+  <div class="lb-stage" id="lbStage">
+    <picture id="lbPicture"><source id="lbSource" type="image/webp"><img id="lbImg" alt=""></picture>
+  </div>
+  <p class="lb-count" id="lbCount" aria-live="polite"></p>
+  <button type="button" class="lb-btn lb-prev" id="lbPrev" aria-label="Предыдущее фото">‹</button>
+  <button type="button" class="lb-btn lb-next" id="lbNext" aria-label="Следующее фото">›</button>
+  <button type="button" class="lb-btn lb-close" id="lbClose" aria-label="Закрыть просмотр">×</button>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="sym-lake" viewBox="0 0 24 24">
+      <path d="M12 2.5C12 2.5 5 10.2 5 14.6A7 7 0 0 0 19 14.6C19 10.2 12 2.5 12 2.5Z" class="drop"/>
+      <path d="M8.3 15.2c1.2-.9 2.4-.9 3.7 0s2.5.9 3.7 0" class="wave"/>
+      <path d="M8.9 18c1-.7 2-.7 3.1 0s2.1.7 3.1 0" class="wave"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!--DATA-->
+<script src="app.js?v={{BUILD}}" defer></script>
+</body>
+</html>

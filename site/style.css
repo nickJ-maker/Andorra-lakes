@@ -1,0 +1,343 @@
+/* «Озёра Андорры» — стиль старой туристической карты */
+
+:root {
+  --paper: #f2e7cd;
+  --paper-2: #e9dab7;
+  --paper-3: #dcc8a0;
+  --ink: #3a2816;
+  --ink-2: #5e4329;
+  --ink-3: #8a6c4b;
+  --accent: #a3402c;
+  --accent-2: #7f2e1f;
+  --water: #3f8790;
+  --water-2: #9fc7c3;
+  --water-ink: #2f6570;
+  --shadow: 0 10px 40px rgba(58, 40, 22, 0.35);
+  --font-display: 'Old Standard TT', 'Times New Roman', serif;
+  --font-text: 'PT Serif', Georgia, serif;
+  --panel-w: 330px;
+  --label: #0a4fe0; /* подписи на карте — ярко-синие, контрастно к рельефу */
+  --paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .12 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
+html.locked, html.locked body { overflow: hidden; }
+body {
+  font-family: var(--font-text);
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(ellipse at 20% 10%, rgba(255, 250, 235, 0.55), transparent 60%),
+    radial-gradient(ellipse at 90% 90%, rgba(170, 130, 80, 0.18), transparent 55%),
+    var(--paper-texture);
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+a { color: var(--accent-2); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- раскладка ---------- */
+
+.app { display: grid; grid-template-columns: minmax(0, 1fr) var(--panel-w); height: 100vh; height: 100dvh; }
+.map-area { position: relative; min-width: 0; padding: 14px 0 14px 14px; }
+.map-frame {
+  position: relative; height: 100%;
+  border: 3px double var(--ink-2);
+  padding: 4px;
+  background: var(--paper-2);
+  box-shadow: inset 0 0 0 1px var(--paper), 0 2px 10px rgba(58, 40, 22, 0.12);
+}
+.map {
+  position: relative; height: 100%; overflow: hidden;
+  border: 1.5px solid var(--ink-2);
+  background: var(--paper-2);
+  touch-action: none; user-select: none; -webkit-user-select: none;
+  cursor: grab;
+}
+.map.dragging { cursor: grabbing; }
+.map-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.map-svg image { image-rendering: auto; }
+
+/* Бумажная фактура и виньетка поверх карты */
+.map-paper {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(ellipse at center, transparent 55%, rgba(120, 85, 45, 0.28) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .28 0 0 0 0 .12 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+/* ---------- векторный слой карты ---------- */
+
+.m-geo path { fill: none; vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round; }
+.m-geo .m-neighbours { fill: #f4ead2; opacity: 0.34; stroke: none; }
+.m-geo .m-water { fill: var(--water-2); stroke: var(--water-ink); stroke-width: 0.7; }
+.m-geo .m-river { stroke: #5f96a5; }
+.m-geo .m-river-minor { stroke-width: 1; opacity: 0.85; }
+.m-geo .m-river-major { stroke-width: 1.9; }
+.m-geo .m-road-casing-1 { stroke: #5a3421; stroke-width: 4.2; }
+.m-geo .m-road-1 { stroke: #e6a25b; stroke-width: 2.4; }
+.m-geo .m-road-casing-2 { stroke: #6b4428; stroke-width: 3.1; }
+.m-geo .m-road-2 { stroke: #f0cf8e; stroke-width: 1.6; }
+.m-geo .m-road-3 { stroke: #8d6443; stroke-width: 0.9; stroke-dasharray: 4 2; }
+.m-geo .m-border-ribbon { stroke: #b04a3b; stroke-width: 9; opacity: 0.2; }
+.m-geo .m-border { stroke: #43291a; stroke-width: 1.6; stroke-dasharray: 8 3 1.5 3; }
+
+/* ---------- подписи ---------- */
+
+.labels text { font-family: var(--font-display); fill: var(--label); paint-order: stroke; stroke: rgba(250, 244, 228, 0.95); stroke-width: 3.5px; stroke-linejoin: round; }
+.labels .l-country { font-size: 17px; letter-spacing: 0.42em; font-weight: 700; fill: var(--label); stroke-width: 4.5px; }
+.labels .l-place { font-size: 13px; }
+.labels .l-place.r1 { font-size: 14.5px; font-weight: 700; }
+.labels .l-place.r3 { font-size: 12px; }
+.labels .l-peak { font-size: 11.5px; font-style: italic; fill: var(--label); }
+.labels .l-peak tspan.ele { font-size: 10.5px; fill: var(--label); }
+.labels .l-river { font-size: 12px; font-style: italic; fill: var(--label); letter-spacing: 0.12em; }
+.labels .s-town { fill: #fbf4e2; stroke: var(--ink); stroke-width: 1.5px; }
+.labels .s-town.r1 { fill: var(--ink); }
+.labels .s-peak { fill: #5a3a22; stroke: none; }
+
+/* ---------- точки-озёра ---------- */
+
+.marker { cursor: pointer; outline: none; }
+.marker .drop { fill: var(--water); stroke: #2b1d10; stroke-width: 1.3; }
+.marker .wave, #sym-lake .wave { fill: none; stroke: #e8f3ef; stroke-width: 1.3; stroke-linecap: round; }
+.marker .halo { fill: rgba(255, 248, 230, 0.8); stroke: rgba(58, 40, 22, 0.35); stroke-width: 1; transition: r 0.15s; }
+.marker .m-label {
+  font-family: var(--font-display); font-weight: 700; font-size: 14.5px; fill: var(--label);
+  paint-order: stroke; stroke: rgba(250, 244, 228, 0.97); stroke-width: 4px; stroke-linejoin: round;
+}
+.marker .leader { stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 2 2; }
+.marker:hover .drop, .marker.hot .drop, .marker:focus-visible .drop { fill: var(--accent); }
+.marker:hover .m-label, .marker.hot .m-label, .marker:focus-visible .m-label { fill: var(--accent-2); }
+.marker:focus-visible .halo { stroke: var(--accent); stroke-width: 2.5; }
+.legend svg .drop { fill: var(--water); stroke: #2b1d10; stroke-width: 1.3; }
+
+/* ---------- элементы оформления на карте ---------- */
+
+.cartouche {
+  position: absolute; top: 14px; left: 14px; z-index: 2;
+  padding: 12px 22px 10px; text-align: center;
+  background: rgba(245, 236, 214, 0.93);
+  border: 3px double var(--ink-2);
+  box-shadow: 0 2px 8px rgba(58, 40, 22, 0.2);
+  pointer-events: none;
+}
+.cartouche::before, .cartouche::after {
+  content: '❦'; position: absolute; top: 50%; transform: translateY(-50%);
+  color: var(--ink-3); font-size: 15px;
+}
+.cartouche::before { left: 6px; }
+.cartouche::after { right: 6px; transform: translateY(-50%) scaleX(-1); }
+.cartouche h1 {
+  margin: 0; font-family: var(--font-display); font-weight: 700;
+  font-size: 26px; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.15;
+}
+.cartouche p {
+  margin: 4px 0 0; font-family: var(--font-display); font-style: italic; font-size: 15px; color: var(--ink-2);
+  border-top: 1px solid var(--ink-3); padding-top: 3px;
+}
+
+.zoom { position: absolute; top: 14px; right: 14px; z-index: 2; display: flex; flex-direction: column; box-shadow: 0 2px 6px rgba(58, 40, 22, 0.25); }
+.zoom button {
+  width: 38px; height: 38px; display: grid; place-items: center;
+  background: rgba(245, 236, 214, 0.95); border: 1.5px solid var(--ink-2); cursor: pointer;
+  font-family: var(--font-display); font-size: 22px; line-height: 1; color: var(--ink);
+}
+.zoom button + button { border-top: 0; }
+.zoom button:hover { background: #fff8e6; color: var(--accent); }
+.zoom svg { width: 18px; height: 18px; }
+
+.compass { position: absolute; right: 16px; bottom: 16px; width: 92px; height: 92px; z-index: 1; pointer-events: none; opacity: 0.88; }
+.compass .c-ring { fill: rgba(245, 236, 214, 0.6); stroke: var(--ink-2); stroke-width: 1.2; }
+.compass .c-thin { fill: none; stroke-width: 0.6; }
+.compass .c-minor path { fill: #d9c49c; stroke: var(--ink-2); stroke-width: 0.8; }
+.compass .c-dark { fill: var(--ink-2); }
+.compass .c-light { fill: #f5ecd6; stroke: var(--ink-2); stroke-width: 0.8; }
+.compass .c-dot { fill: var(--accent); }
+.compass .c-n { font-family: var(--font-display); font-weight: 700; font-size: 11px; fill: var(--ink); }
+
+.map-foot { position: absolute; left: 14px; bottom: 14px; z-index: 2; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.legend {
+  background: rgba(245, 236, 214, 0.94); border: 1.5px solid var(--ink-2);
+  font-size: 13px; max-width: 250px; box-shadow: 0 2px 6px rgba(58, 40, 22, 0.2);
+}
+.legend summary { cursor: pointer; padding: 5px 10px; font-family: var(--font-display); font-weight: 700; letter-spacing: 0.04em; }
+.legend ul { list-style: none; margin: 0; padding: 2px 10px 8px; }
+.legend li { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
+.legend li svg { width: 22px; height: 22px; flex: none; }
+.legend .lg-town { fill: #fbf4e2; stroke: var(--ink); stroke-width: 1.5; }
+.legend .lg-peak { fill: #5a3a22; }
+.legend .lg-road-c { stroke: #5a3421; stroke-width: 5; }
+.legend .lg-road { stroke: #e6a25b; stroke-width: 3; }
+.legend .lg-river { fill: none; stroke: #5f96a5; stroke-width: 2; }
+.legend .lg-ribbon { stroke: #b04a3b; stroke-width: 9; opacity: 0.25; }
+.legend .lg-border { stroke: #43291a; stroke-width: 1.6; stroke-dasharray: 5 2 1 2; }
+
+.scalebar {
+  background: rgba(245, 236, 214, 0.9); border: 1px solid var(--ink-3); padding: 3px 10px 4px;
+  font-family: var(--font-display); font-size: 12px; color: var(--ink);
+}
+.scalebar svg { display: block; overflow: visible; }
+.scalebar .sb-a { fill: var(--ink); }
+.scalebar .sb-b { fill: #f7efdc; }
+.scalebar rect { stroke: var(--ink); stroke-width: 1; }
+.scalebar text { font-size: 11px; fill: var(--ink); font-family: var(--font-display); }
+
+.tooltip {
+  position: absolute; z-index: 5; pointer-events: none;
+  background: #f7efdc; border: 1.5px solid var(--ink-2); padding: 5px; width: 176px;
+  box-shadow: 0 4px 14px rgba(58, 40, 22, 0.3);
+  font-family: var(--font-display);
+}
+.tooltip img { display: block; width: 100%; height: 108px; object-fit: cover; background: var(--paper-3); }
+.tooltip b { display: block; font-size: 14px; line-height: 1.2; margin-top: 4px; }
+.tooltip span { font-size: 12.5px; color: var(--ink-2); }
+
+.to-list { display: none; }
+
+/* ---------- список озёр ---------- */
+
+.panel {
+  display: flex; flex-direction: column; min-height: 0;
+  padding: 14px 14px 10px;
+}
+.panel h2 {
+  margin: 4px 0 10px; font-family: var(--font-display); font-weight: 700; font-size: 21px;
+  letter-spacing: 0.08em; text-transform: uppercase; text-align: center;
+  border-bottom: 3px double var(--ink-2); padding-bottom: 6px;
+}
+.lake-list { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; min-height: 0; }
+.lake-list li + li { border-top: 1px dashed var(--paper-3); }
+.lake-row {
+  display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: center;
+  width: 100%; padding: 8px 6px; border: 0; background: none; cursor: pointer; text-align: left;
+}
+.lake-row:hover, .lake-row.hot { background: rgba(163, 64, 44, 0.08); }
+.lake-row img, .lake-row .noimg {
+  width: 72px; height: 54px; object-fit: cover; display: block;
+  border: 1px solid var(--ink-3); background: var(--paper-3); box-shadow: 1px 1px 0 var(--paper-3);
+}
+.lake-row .name { display: block; font-family: var(--font-display); font-weight: 700; font-size: 16px; line-height: 1.2; }
+.lake-row .meta { display: block; font-size: 13px; color: var(--ink-2); margin-top: 2px; }
+.lake-row.hot .name, .lake-row:hover .name { color: var(--accent-2); }
+.badge { display: inline-block; font-size: 11.5px; padding: 0 5px; border: 1px solid var(--accent); color: var(--accent); margin-left: 4px; }
+.credits { font-size: 11.5px; color: var(--ink-3); padding-top: 8px; border-top: 1px solid var(--paper-3); }
+.credits p { margin: 0; }
+.credits a { color: inherit; }
+
+/* ---------- окно озера ---------- */
+
+.modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 3vh 16px; }
+.modal[hidden] { display: none; }
+.modal-backdrop { position: absolute; inset: 0; background: rgba(40, 27, 14, 0.55); animation: fade 0.18s ease-out; }
+.modal-dialog {
+  position: relative; width: min(80vw, 1100px); max-height: 94vh; overflow-y: auto; overscroll-behavior: contain;
+  background-color: var(--paper); background-image: var(--paper-texture);
+  border: 4px double var(--ink-2); box-shadow: var(--shadow);
+  padding: 26px 34px 30px; outline: none;
+  animation: pop 0.2s ease-out;
+}
+.modal-close {
+  position: sticky; top: 0; float: right; margin: -12px -20px 0 0;
+  width: 42px; height: 42px; border: 1.5px solid var(--ink-2); background: #f7efdc; cursor: pointer;
+  font-size: 28px; line-height: 1; z-index: 2;
+}
+.modal-close:hover { color: var(--accent); }
+.m-head { text-align: center; margin-bottom: 16px; }
+.m-head h2 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(24px, 3.2vw, 34px); line-height: 1.15; }
+.m-country { margin: 4px 0 0; font-family: var(--font-display); font-style: italic; font-size: 17px; color: var(--ink-2); }
+.m-country::before, .m-country::after { content: '—'; margin: 0 10px; color: var(--ink-3); }
+.m-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 22px; }
+.m-links a {
+  display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px;
+  border: 1.5px solid var(--ink-2); background: #f7efdc; color: var(--ink); text-decoration: none;
+  font-family: var(--font-display); font-weight: 700; font-size: 15.5px;
+  box-shadow: 2px 2px 0 var(--paper-3);
+}
+.m-links a:hover { background: var(--accent); color: #fff7e6; border-color: var(--accent-2); }
+.m-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.m-gallery button {
+  padding: 0; border: 1px solid var(--ink-3); background: var(--paper-3); cursor: zoom-in;
+  aspect-ratio: 4 / 3; overflow: hidden; display: block;
+}
+.m-gallery img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.25s; }
+.m-gallery button:hover img { transform: scale(1.04); }
+.m-empty {
+  grid-column: 1 / -1; padding: 40px 20px; text-align: center; border: 1.5px dashed var(--ink-3);
+  font-family: var(--font-display); font-style: italic; color: var(--ink-2);
+}
+.m-komoot { margin-top: 26px; }
+.m-komoot[hidden] { display: none; }
+.m-komoot h3 {
+  font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: 0.06em; text-transform: uppercase;
+  text-align: center; margin: 0 0 10px;
+  display: flex; align-items: center; gap: 14px;
+}
+.m-komoot h3::before, .m-komoot h3::after { content: ''; flex: 1; border-top: 3px double var(--ink-3); }
+.komoot-frame { border: 1.5px solid var(--ink-2); background: var(--paper-2); }
+.komoot-frame iframe { display: block; width: 100%; height: 580px; border: 0; }
+.komoot-note { font-size: 13.5px; color: var(--ink-2); text-align: center; margin: 8px 0 0; }
+
+/* ---------- лайтбокс ---------- */
+
+.lightbox { position: fixed; inset: 0; z-index: 80; background: rgba(12, 9, 6, 0.95); touch-action: none; animation: fade 0.15s ease-out; }
+.lightbox[hidden] { display: none; }
+.lb-stage { position: absolute; inset: 48px 64px; display: grid; place-items: center; }
+.lb-stage picture { display: contents; }
+.lb-stage img { max-width: calc(100vw - 128px); max-height: calc(100vh - 96px); max-height: calc(100dvh - 96px); object-fit: contain; user-select: none; -webkit-user-drag: none; box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5); transition: opacity 0.15s; }
+.lb-stage img.loading { opacity: 0.35; }
+.lb-count { position: absolute; top: 12px; left: 0; right: 0; margin: 0; text-align: center; color: #e9dcc0; font-family: var(--font-display); font-size: 16px; letter-spacing: 0.1em; pointer-events: none; }
+.lb-btn { position: absolute; border: 0; background: rgba(245, 236, 214, 0.12); color: #f2e7cd; cursor: pointer; font-size: 44px; line-height: 1; width: 52px; height: 72px; display: grid; place-items: center; }
+.lb-btn:hover { background: rgba(245, 236, 214, 0.25); }
+.lb-prev { left: 8px; top: 50%; transform: translateY(-50%); }
+.lb-next { right: 8px; top: 50%; transform: translateY(-50%); }
+.lb-close { top: 6px; right: 8px; width: 48px; height: 48px; font-size: 36px; }
+
+@keyframes fade { from { opacity: 0; } }
+@keyframes pop { from { opacity: 0; transform: translateY(12px) scale(0.985); } }
+
+/* ---------- планшет и телефон ---------- */
+
+@media (max-width: 1023px) {
+  .app { display: block; height: auto; }
+  .map-area { height: 76vh; height: 76svh; min-height: 420px; padding: 10px; }
+  .panel { padding: 18px 16px 24px; }
+  .lake-list { overflow: visible; }
+  .to-list {
+    display: block; position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); z-index: 3;
+    padding: 6px 14px; background: rgba(245, 236, 214, 0.95); border: 1.5px solid var(--ink-2);
+    font-family: var(--font-display); font-weight: 700; color: var(--ink); text-decoration: none; white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(58, 40, 22, 0.25);
+  }
+  .map-foot { bottom: 56px; }
+  .compass { bottom: 58px; width: 74px; height: 74px; }
+  .modal { padding: 0; }
+  .modal-dialog { width: 100%; max-height: none; height: 100%; border-width: 0; padding: 18px 16px 28px; }
+  .modal-close { margin: -6px -6px 0 0; }
+  .komoot-frame iframe { height: 440px; }
+}
+
+@media (max-width: 600px) {
+  .cartouche { top: 8px; left: 8px; padding: 7px 14px 6px; }
+  .cartouche::before, .cartouche::after { display: none; }
+  .cartouche h1 { font-size: 18px; letter-spacing: 0.1em; }
+  .cartouche p { font-size: 12.5px; }
+  .zoom { top: 8px; right: 8px; }
+  .zoom button { width: 40px; height: 40px; }
+  .map-foot { left: 8px; }
+  .legend { font-size: 12px; }
+  .compass { display: none; }
+  .m-gallery { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .m-links a { font-size: 14.5px; padding: 8px 12px; flex: 1 1 100%; justify-content: center; }
+  .lb-stage { inset: 44px 0; }
+  .lb-stage img { max-width: 100vw; max-height: calc(100vh - 88px); max-height: calc(100dvh - 88px); }
+  .lb-btn.lb-prev, .lb-btn.lb-next { width: 44px; height: 60px; font-size: 36px; background: rgba(0, 0, 0, 0.3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

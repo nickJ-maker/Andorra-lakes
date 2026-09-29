@@ -1,0 +1,12 @@
+{
+  "extent": {
+    "w": 1.2,
+    "e": 2,
+    "s": 42.3,
+    "n": 42.85
+  },
+  "width": 2400,
+  "height": 2241,
+  "lat0": 42.575,
+  "projection": "equirectangular (cos lat0)"
+}

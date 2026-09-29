@@ -1,0 +1,52 @@
+{
+  "https://maps.app.goo.gl/bXzT48rRzeNaNqAa6": {
+    "lat": 42.626073,
+    "lon": 1.551788,
+    "resolved": "2026-09-29"
+  },
+  "https://maps.app.goo.gl/D1Q44sUPwzL5o6su6": {
+    "lat": 42.609676,
+    "lon": 1.579079,
+    "resolved": "2026-09-29"
+  },
+  "https://maps.app.goo.gl/e2VKY4sndWh27TLV8": {
+    "lat": 42.613037,
+    "lon": 1.670287,
+    "resolved": "2026-09-29"
+  },
+  "https://maps.app.goo.gl/EU6UBhdg1bnhp94b9": {
+    "lat": 42.627,
+    "lon": 1.710634,
+    "resolved": "2026-09-29"
+  },
+  "https://maps.app.goo.gl/G1kmCu5VZQZPH5JL7": {
+    "lat": 42.619667,
+    "lon": 1.683688,
+    "resolved": "2026-09-29"
+  },
+  "https://maps.app.goo.gl/hUb5RCRfZtk4oG5fA": {
+    "lat": 42.665033,
+    "lon": 1.489763,
+    "resolved": "2026-09-29"
+  },
+  "https://maps.app.goo.gl/Nnm3sFPtaGAU1CJn6": {
+    "lat": 42.584329,
+    "lon": 1.664882,
+    "resolved": "2026-09-29"
+  },
+  "https://maps.app.goo.gl/Qai4pB4ApaaDbc5q9": {
+    "lat": 42.637966,
+    "lon": 1.4745,
+    "resolved": "2026-09-29"
+  },
+  "https://maps.app.goo.gl/U2K6jCRPCjC8vwrQ7": {
+    "lat": 42.584329,
+    "lon": 1.664882,
+    "resolved": "2026-09-29"
+  },
+  "https://maps.app.goo.gl/Xg7iFvixS6oGiRUH8": {
+    "lat": 42.584336,
+    "lon": 1.664879,
+    "resolved": "2026-09-29"
+  }
+}

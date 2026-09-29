@@ -1,0 +1,23 @@
+{
+  "name": "ozera-andorry",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Сайт «Озёра Андорры» — пешие маршруты к горным озёрам Андорры и приграничья",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev": "node scripts/dev.js",
+    "map:data": "node map/prepare/fetch-osm.js",
+    "map:relief": "node map/prepare/relief.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "exifr": "^7.1.3",
+    "sharp": "^0.34.0"
+  },
+  "devDependencies": {
+    "geotiff": "^2.1.3"
+  }
+}

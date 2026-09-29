@@ -1,0 +1,60 @@
+{
+  "defaultView": { "w": 1.40, "e": 1.80, "s": 42.42, "n": 42.68 },
+
+  "countries": [
+    { "label": "АНДОРРА", "lat": 42.472, "lon": 1.603 },
+    { "label": "ФРАНЦИЯ", "lat": 42.765, "lon": 1.655 },
+    { "label": "ИСПАНИЯ", "lat": 42.378, "lon": 1.610 }
+  ],
+
+  "places": [
+    { "osm": "Andorra la Vella", "label": "Андорра-ла-Велья", "rank": 1 },
+    { "osm": "les Escaldes", "label": "Эскальдес-Энгордань", "rank": 2 },
+    { "osm": "Encamp", "label": "Энкамп", "rank": 2 },
+    { "osm": "Canillo", "label": "Канильо", "rank": 2 },
+    { "osm": "Ordino", "label": "Ордино", "rank": 2 },
+    { "osm": "La Massana", "label": "Ла-Массана", "rank": 2 },
+    { "osm": "Sant Julià de Lòria", "label": "Сант-Жулия-де-Лория", "rank": 2 },
+    { "osm": "Pas de la Casa", "label": "Пас-де-ла-Каза", "rank": 2 },
+    { "osm": "la Seu d'Urgell", "label": "Ла-Сеу-д'Уржель", "rank": 2 },
+    { "osm": "Puigcerdà", "label": "Пучсерда", "rank": 2 },
+    { "osm": "Ax-les-Thermes", "label": "Акс-ле-Терм", "rank": 2 },
+    { "osm": "Soldeu", "label": "Сольдеу", "rank": 3 },
+    { "osm": "Arinsal", "label": "Аринсаль", "rank": 3 },
+    { "osm": "el Serrat", "label": "Эль-Серрат", "rank": 3 },
+    { "osm": "L'Hospitalet-près-l'Andorre", "label": "Л'Оспиталет", "rank": 3 },
+    { "osm": "Porté-Puymorens", "label": "Порте-Пюиморан", "rank": 3 },
+    { "osm": "Mérens-les-Vals", "label": "Меранс-ле-Валь", "rank": 3 },
+    { "osm": "Bourg-Madame", "label": "Бур-Мадам", "rank": 3 },
+    { "osm": "Llívia", "label": "Льивия", "rank": 3 },
+    { "osm": "Auzat", "label": "Оза", "rank": 3 },
+    { "osm": "Vicdessos", "label": "Викдессос", "rank": 3 }
+  ],
+
+  "peaks": [
+    { "osm": "Comapedrosa", "label": "Кома-Педроза", "rank": 1 },
+    { "osm": "Estats", "label": "Пика-д'Эстатс", "rank": 1 },
+    { "osm": "Carlit", "label": "Карлит", "rank": 1 },
+    { "osm": "Pic de l'Estanyó", "label": "Эстаньо", "rank": 2 },
+    { "osm": "Serrera", "label": "Серрера", "rank": 2 },
+    { "osm": "Font Blanca", "label": "Фонт-Бланка", "rank": 2 },
+    { "osm": "Puigpedrós", "label": "Пучпедрос", "rank": 2 },
+    { "osm": "Tristaina", "label": "Тристайна", "rank": 2 },
+    { "osm": "Casamanya", "label": "Касаманья", "rank": 2 },
+    { "osm": "Montcalm", "label": "Монкальм", "rank": 3 },
+    { "osm": "Tossa Plana de Lles", "label": "Тосса-Плана", "rank": 3 },
+    { "osm": "Pessons", "label": "Пессонс", "rank": 3 }
+  ],
+
+  "riverLabels": [
+    { "label": "Валира", "rivers": ["Valira", "riu Valira", "Riu Valira"], "lat": 42.470, "lon": 1.495 },
+    { "label": "Валира-д'Орьен", "rivers": ["Valira d'Orient"], "lat": 42.556, "lon": 1.625 },
+    { "label": "Валира-дель-Норд", "rivers": ["Valira del Nord", "Riu Tristaina/Valira del Nord"], "lat": 42.575, "lon": 1.527 },
+    { "label": "Сегре", "rivers": ["el Segre"], "lat": 42.385, "lon": 1.690 },
+    { "label": "Арьеж", "rivers": ["L'Ariège"], "lat": 42.680, "lon": 1.835 }
+  ],
+
+  "style": {
+    "majorRivers": ["Valira", "riu Valira", "Riu Valira", "Valira d'Orient", "Valira del Nord", "Riu Tristaina/Valira del Nord", "el Segre", "L'Ariège", "La Têt", "Le Carol", "Vicdessos", "Riu d'Arinsal", "la Noguera de Vallferrera"]
+  }
+}

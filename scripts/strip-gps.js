@@ -98,8 +98,19 @@ function webpHasMeta(buf) {
   return false;
 }
 
+// JPEG: есть ли в EXIF блок GPS — даже пустой (без координат). Такой блок пишут, например, телефоны Xiaomi
+// при выключенной геолокации, и программы просмотра метаданных показывают его как «геометку».
+function jpegHasGpsBlock(buf) {
+  try {
+    const exif = piexif.load(buf.toString('binary'));
+    return exif['0th']?.[piexif.ImageIFD.GPSTag] !== undefined || Object.keys(exif.GPS || {}).length > 0;
+  } catch { return false; }
+}
+
 async function hasGps(file, buf) {
-  if (path.extname(file).toLowerCase() === '.webp') return webpHasMeta(buf);
+  const ext = path.extname(file).toLowerCase();
+  if (ext === '.webp') return webpHasMeta(buf);
+  if ((ext === '.jpg' || ext === '.jpeg') && jpegHasGpsBlock(buf)) return true;
   const g = await exifr.gps(buf).catch(() => null);
   return !!(g && (g.latitude || g.longitude)) || XMP_GPS.test(buf.toString('latin1'));
 }

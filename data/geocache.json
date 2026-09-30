@@ -1,4 +1,14 @@
 {
+  "https://maps.app.goo.gl/3aBqW6CQ8eEAtN9RA": {
+    "lat": 42.520774,
+    "lon": 1.57005,
+    "resolved": "2026-09-30"
+  },
+  "https://maps.app.goo.gl/5PiGbdhGbaeRM82V7": {
+    "lat": 42.53073,
+    "lon": 1.600597,
+    "resolved": "2026-09-30"
+  },
   "https://maps.app.goo.gl/8CwQoSQTyP81WDdA8": {
     "lat": 42.608671,
     "lon": 1.718493,
@@ -18,6 +28,11 @@
     "lat": 42.531958,
     "lon": 1.697499,
     "resolved": "2026-09-29"
+  },
+  "https://maps.app.goo.gl/aYnsmoXCca75dRZU7": {
+    "lat": 42.645469,
+    "lon": 1.488675,
+    "resolved": "2026-09-30"
   },
   "https://maps.app.goo.gl/bXzT48rRzeNaNqAa6": {
     "lat": 42.626073,
@@ -44,10 +59,20 @@
     "lon": 1.710634,
     "resolved": "2026-09-29"
   },
+  "https://maps.app.goo.gl/fBEGfGdG4sd6kkoVA": {
+    "lat": 42.63159,
+    "lon": 1.481881,
+    "resolved": "2026-09-30"
+  },
   "https://maps.app.goo.gl/G1kmCu5VZQZPH5JL7": {
     "lat": 42.619667,
     "lon": 1.683688,
     "resolved": "2026-09-29"
+  },
+  "https://maps.app.goo.gl/gt7DWcg9HQdDRUxw7": {
+    "lat": 42.653132,
+    "lon": 1.570023,
+    "resolved": "2026-09-30"
   },
   "https://maps.app.goo.gl/hBUNcFSzNncxzys86": {
     "lat": 42.582311,
@@ -68,6 +93,11 @@
     "lat": 42.584031,
     "lon": 1.65202,
     "resolved": "2026-09-29"
+  },
+  "https://maps.app.goo.gl/mL9t35wWa9ZWeHSe9": {
+    "lat": 42.496895,
+    "lon": 1.681557,
+    "resolved": "2026-09-30"
   },
   "https://maps.app.goo.gl/Nnm3sFPtaGAU1CJn6": {
     "lat": 42.584329,
@@ -94,6 +124,11 @@
     "lon": 1.595387,
     "resolved": "2026-09-29"
   },
+  "https://maps.app.goo.gl/TbWwjBdrmkbGHwLBA": {
+    "lat": 42.587105,
+    "lon": 1.437007,
+    "resolved": "2026-09-30"
+  },
   "https://maps.app.goo.gl/U2K6jCRPCjC8vwrQ7": {
     "lat": 42.584329,
     "lon": 1.664882,
@@ -104,9 +139,24 @@
     "lon": 1.664882,
     "resolved": "2026-09-29"
   },
+  "https://maps.app.goo.gl/x2rAKHtcvNg4rZ5o9": {
+    "lat": 42.626073,
+    "lon": 1.551788,
+    "resolved": "2026-09-30"
+  },
   "https://maps.app.goo.gl/Xg7iFvixS6oGiRUH8": {
     "lat": 42.584336,
     "lon": 1.664879,
     "resolved": "2026-09-29"
+  },
+  "https://maps.app.goo.gl/XWEZiPEwE27pxm73A": {
+    "lat": 42.577014,
+    "lon": 1.479908,
+    "resolved": "2026-09-30"
+  },
+  "https://maps.app.goo.gl/ZtfCBhXWN8VTGKm6A": {
+    "lat": 42.531958,
+    "lon": 1.697499,
+    "resolved": "2026-09-30"
   }
 }
